@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Welcome{% endblock %} to Confluent Python App</h1>
+{% endblock %}
+
+{% block content %}
+<div>
+  <h2>MyFluent</h2>
+  <form>
+    <a href='#' id='produce'><button class='btn btn-default'>Produce</button></a>
+    <a href='#' id='consume'><button class='btn btn-default'>Consume</button></a>
+  </form>
+  <p>Delivered records: {{ delivered_records }}</p>
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,7 @@
+*.pyc
+ccloud-venv/
+
+envvar.py
+venv2/
+__pycache__/
+

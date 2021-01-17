@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class='left'>
+  <form method="POST">
+    <div class='heading'>
+      <span style="font-size: 30px; font-weight: bolder;"><input type="text" name='topic' id="topic"
+          placeholder="{{topic}}" class="text-input">Fluent</span>
+
+
+      <input type="submit" name="go_button" value='GO!' class='button'>
+    </div>
+  </form>
+  <div class="tweet-list">
+
+    {% for tweet in tweets1 %}
+    {% if tweet.media_url %}
+    <div class="tweet">
+      <div class="user-container">
+        <div>
+          <img src="{{ tweet.user.profile_image_url }}" alt="profile-pic" class='profile-pic'>
+        </div>
+        <p class="username">{{ tweet.user.name|e }}</p>
+      </div>
+      <p class="text">{{ tweet.text|e }}</p>
+
+      <div>
+        <img src="{{ tweet.media_url }}" alt="photo" class='tweet-image'>
+      </div>
+      <!-- <span class="created_at">{{ tweet.created_at|e }}</span>
+      <span class="retweet">Retweet count: {{ tweet.retweet_count|e }}</span> -->
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div class='right'>
+  <div class='heading'>
+
+  </div>
+  <!-- <div class="tweet-list">
+
+    {% for tweet in tweets %}
+    <div class="tweet">
+
+      <p class="text">{{ tweet.text|e }}</p>
+      <p class="text">{{ tweet.created_at|e }}</p>
+      <p class="text">By {{ tweet.user.name|e }}</p>
+      <p class="text">Retweet count: {{ tweet.retweet_count|e }}</p>
+      {% if tweet.media_url %}
+      <img src="{{ tweet.media_url }}" alt="photo" style="width:200px;">
+      {% endif %}
+    </div>
+    <br>
+    {% endfor %}
+  </div> -->
+</div>
+
+{% endblock %}
