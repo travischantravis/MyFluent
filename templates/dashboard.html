@@ -15,32 +15,33 @@
   <div class="tweet-list">
 
     {% for tweet in tweets1 %}
-    {% if tweet.media_url %}
     <div class="tweet">
       <div class="user-container">
         <div>
           <img src="{{ tweet.user.profile_image_url }}" alt="profile-pic" class='profile-pic'>
         </div>
         <p class="username">{{ tweet.user.name|e }}</p>
+        <i class="fa fa-twitter my-twitter"></i>
       </div>
       <p class="text">{{ tweet.text|e }}</p>
 
+      {% if tweet.media_url %}
       <div>
         <img src="{{ tweet.media_url }}" alt="photo" class='tweet-image'>
       </div>
+      {% endif %}
       <!-- <span class="created_at">{{ tweet.created_at|e }}</span>
       <span class="retweet">Retweet count: {{ tweet.retweet_count|e }}</span> -->
     </div>
-    {% endif %}
     {% endfor %}
   </div>
 </div>
 
-<div class='right'>
-  <div class='heading'>
-
-  </div>
-  <!-- <div class="tweet-list">
+<!-- <div class='right'> -->
+<!-- <div class='heading'>
+    <p>Producing tweets to Kafka Topic...</p>
+  </div> -->
+<!-- <div class="tweet-list">
 
     {% for tweet in tweets %}
     <div class="tweet">
@@ -56,6 +57,6 @@
     <br>
     {% endfor %}
   </div> -->
-</div>
+<!-- </div> -->
 
 {% endblock %}

@@ -126,6 +126,42 @@ def stream_page():
 
 
 @socketio.event
+def produce_event(data, topic="cat"):
+    headers = create_headers(bearer_token)
+    rules = get_rules(headers, bearer_token)
+    delete = delete_all_rules(headers, bearer_token, rules)
+    set1 = set_rules(headers, delete, bearer_token, topic)
+    params = {
+        "tweet.fields": "created_at",
+        'expansions': 'attachments.media_keys',
+        'media.fields': 'preview_image_url'
+    }
+    response = requests.get(
+        "https://api.twitter.com/2/tweets/search/stream", headers=headers, stream=True, params=params,
+    )
+    print(response.status_code)
+    if response.status_code != 200:
+        raise Exception(
+            "Cannot get stream (HTTP {}): {}".format(
+                response.status_code, response.text)
+
+        )
+
+    repetition = 0
+    emit('produce_response', {
+        'data': 'Producing tweets to Confluent...'})
+    for response_line in response.iter_lines():
+        if repetition < 10:
+            repetition += 1
+            if response_line:
+                json_response = json.loads(response_line)
+                record_value = json.dumps(json_response)
+                producer.produce('cat', key='cat',
+                                 value=record_value, on_delivery=acked)
+            producer.flush()
+
+
+@socketio.event
 def stream_event(data):
     topic = 'cat'
     headers = create_headers(bearer_token)
@@ -225,11 +261,11 @@ def dashboard():
     # right column
 
     # Streams
-    headers = create_headers(bearer_token)
-    rules = get_rules(headers, bearer_token)
-    delete = delete_all_rules(headers, bearer_token, rules)
-    set1 = set_rules(headers, delete, bearer_token, topic)
-    get_stream(headers, set1)
+    # headers = create_headers(bearer_token)
+    # rules = get_rules(headers, bearer_token)
+    # delete = delete_all_rules(headers, bearer_token, rules)
+    # set1 = set_rules(headers, delete, bearer_token, topic)
+    # get_stream(headers, set1)
 
     return render_template('dashboard.html', tweets1=tweets_formatted1, topic=topic)
 
@@ -241,5 +277,5 @@ def handle_json(data):
 
 if __name__ == '__main__':
     app.debug = "True"
-    # app.run()
-    socketio.run(app)
+    app.run()
+    # socketio.run(app)
